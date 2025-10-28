@@ -6,3 +6,7 @@
 ### Hexlet tests and linter status:
 
 [![Actions Status](https://github.com/olgarozmetova/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/olgarozmetova/frontend-project-11/actions)
+
+### View a website:
+
+https://frontend-project-11-pi-seven.vercel.app
