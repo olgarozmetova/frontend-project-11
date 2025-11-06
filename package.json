@@ -1,6 +1,6 @@
 {
   "name": "@hexlet/code",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "RSS reader",
   "homepage": "https://github.com/olgarozmetova/frontend-project-11#readme",
@@ -31,6 +31,8 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "bootstrap": "^5.3.8"
+    "bootstrap": "^5.3.8",
+    "on-change": "^6.0.1",
+    "yup": "^1.7.1"
   }
 }
