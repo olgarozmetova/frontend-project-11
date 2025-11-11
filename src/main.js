@@ -1,46 +1,55 @@
 import './style.css'
-import { buildSchema } from './validation.js'
+
+import { initI18n } from './i18n.js'
+import { configureYup, buildSchema } from './validation.js'
 import { initView } from './view.js'
 
-const state = {
-  feeds: [],
-  form: {
-    status: 'filling',
-    error: null,
-  },
-}
+initI18n()
+  .then(() => {
+    configureYup()
 
-const elements = {
-  form: document.querySelector('.rss-form'),
-  input: document.querySelector('#url-input'),
-  feedback: document.querySelector('.feedback'),
-}
+    const state = {
+      feeds: [],
+      form: {
+        status: 'filling',
+        error: null,
+      },
+    }
 
-const watched = initView(state, elements)
+    const elements = {
+      form: document.querySelector('.rss-form'),
+      input: document.querySelector('#url-input'),
+      feedback: document.querySelector('.feedback'),
+    }
 
-elements.form.addEventListener('submit', (e) => {
-  e.preventDefault()
+    const watched = initView(state, elements)
 
-  const formData = new FormData(e.target)
-  const url = formData.get('url').trim()
+    elements.form.addEventListener('submit', (e) => {
+      e.preventDefault()
 
-  const data = { url }
-  const schema = buildSchema(watched.feeds)
+      const formData = new FormData(e.target)
+      const url = formData.get('url').trim()
 
-  watched.form.status = 'filling'
-  watched.form.error = null
+      const data = { url }
+      const schema = buildSchema(watched.feeds)
 
-  schema
-    .validate(data)
-    .then(({ url }) => {
-      // successful
-      watched.feeds.push(url)
-      watched.form.status = 'success'
+      watched.form.status = 'filling'
       watched.form.error = null
+
+      schema
+        .validate(data)
+        .then(({ url }) => {
+          // successful
+          watched.feeds.push(url)
+          watched.form.status = 'success'
+        })
+        .catch((err) => {
+          // errors
+          watched.form.status = 'invalid'
+          watched.form.error = err.message
+        })
     })
-    .catch((err) => {
-      // errors
-      watched.form.status = 'invalid'
-      watched.form.error = err.message
-    })
-})
+  })
+  .catch((err) => {
+    console.error('Ошибка инициализации i18next:', err)
+  })
