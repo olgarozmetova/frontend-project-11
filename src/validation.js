@@ -6,6 +6,7 @@ export const configureYup = () => {
       url: 'errors.invalidUrl',
     },
     mixed: {
+      required: 'errors.required',
       notOneOf: 'errors.exists',
     },
   })

@@ -10,8 +10,9 @@ initI18n()
 
     const state = {
       feeds: [],
+      posts: [],
       form: {
-        status: 'filling',
+        status: 'filling', // "processing", "failed", "success"
         error: null,
       },
     }
