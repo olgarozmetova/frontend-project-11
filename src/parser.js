@@ -1,7 +1,6 @@
-const generateId = () =>
-  `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 9)}`
+import generateId from './generateId'
 
-export const parseFeed = (xmlString) => {
+export const parseFeed = xmlString => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(xmlString, 'text/xml')
 
