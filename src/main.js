@@ -29,6 +29,29 @@ initI18n()
 
     const watched = initView(state, elements)
 
+    const updateFeeds = () => {
+      const promises = watched.feeds.map(feed =>
+        loadFeed(feed.url)
+          .then(xml => parseFeed(xml))
+          .then(({ posts }) => {
+            const existingLinks = watched.posts
+              .filter(p => p.feedId === feed.id)
+              .map(p => p.link)
+
+            const newPosts = posts.filter(p => !existingLinks.includes(p.link))
+
+            if (newPosts.length > 0) {
+              watched.posts.push(...newPosts)
+            }
+          })
+          .catch(() => {}),
+      )
+
+      Promise.all(promises).finally(() => {
+        setTimeout(updateFeeds, 5000)
+      })
+    }
+
     elements.form.addEventListener('submit', (e) => {
       e.preventDefault()
 
@@ -65,6 +88,10 @@ initI18n()
           watched.feeds.push(normalizedFeed)
           watched.posts.push(...normalizedPosts)
           watched.form.status = 'success'
+
+          if (watched.feeds.length === 1) {
+            updateFeeds()
+          }
         })
         .catch((err) => {
           // errors
