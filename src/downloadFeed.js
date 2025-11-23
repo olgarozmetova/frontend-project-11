@@ -5,7 +5,7 @@ const buildProxyUrl = url =>
     url,
   )}`
 
-export default function loadFeed(url) {
+export const loadFeed = (url) => {
   const proxyUrl = buildProxyUrl(url)
 
   return axios
@@ -14,6 +14,6 @@ export default function loadFeed(url) {
       return res.data.contents
     })
     .catch(() => {
-      throw new Error('networkError')
+      throw new Error('network')
     })
 }
