@@ -1,5 +1,6 @@
 import onChange from 'on-change'
 import i18next from 'i18next'
+import * as bootstrap from 'bootstrap'
 
 const renderFeeds = (feeds, feedsList) => {
   feedsList.innerHTML = ''
@@ -7,30 +8,53 @@ const renderFeeds = (feeds, feedsList) => {
 
   feeds.forEach((feed) => {
     const li = document.createElement('li')
-    li.classList.add('list-group-item')
+    li.classList.add('list-group-item', 'border-0', 'rounded-0')
     li.innerHTML = `
-      <h3 class="feed-title">${feed.title}</h3>
+      <h3 class="feed-title h6 m-0">${feed.title}</h3>
       <p class="m-0 small text-black-50">${feed.description}</p>
     `
     feedsList.appendChild(li)
   })
 }
 
-const renderPosts = (posts, postsList) => {
+const renderPosts = (posts, postsList, readPosts, modalState, elements) => {
   postsList.innerHTML = ''
   if (posts.length === 0) return
 
   posts.forEach((post) => {
     const li = document.createElement('li')
-    li.classList.add('list-group-item')
+    li.classList.add(
+      'list-group-item',
+      'd-flex',
+      'justify-content-between',
+      'align-items-start',
+      'border-0',
+      'border-end-0',
+    )
+
     const a = document.createElement('a')
     a.href = post.link
     a.target = '_blank'
-    a.rel = 'noopener noreferrer'
-    a.classList.add('post-link')
     a.textContent = post.title
-    li.appendChild(a)
-    postsList.appendChild(li)
+    a.classList.add(readPosts.has(post.id) ? 'fw-normal' : 'fw-bold')
+
+    const button = document.createElement('button')
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
+    button.textContent = 'Просмотр'
+    button.addEventListener('click', () => {
+      // Modal update
+      modalState.title = post.title
+      modalState.description = post.description
+      modalState.link = post.link
+      // Mark as read
+      readPosts.add(post.id)
+      // Modal open
+      const modal = new bootstrap.Modal(elements.modalElement)
+      modal.show()
+    })
+
+    li.append(a, button)
+    postsList.append(li)
   })
 }
 
@@ -78,14 +102,36 @@ export const initView = (state, elements) => {
       renderFeeds(watched.feeds, feedsList)
     }
 
-    if (path && (path === 'posts' || path.startsWith('posts'))) {
-      renderPosts(watched.posts, postsList)
+    if (
+      path
+      && (path === 'posts'
+        || path.startsWith('posts')
+        || path.startsWith('ui.readPosts'))
+    ) {
+      renderPosts(
+        watched.posts,
+        postsList,
+        watched.ui.readPosts,
+        watched.ui.modal,
+        elements,
+      )
+    }
+
+    if (path.startsWith('ui.modal')) {
+      elements.modalTitle.textContent = watched.ui.modal.title
+      elements.modalBody.textContent = watched.ui.modal.description
+      elements.modalLink.href = watched.ui.modal.link
     }
   })
 
-  // initial render
   renderFeeds(state.feeds, elements.feedsList)
-  renderPosts(state.posts, elements.postsList)
+  renderPosts(
+    state.posts,
+    elements.postsList,
+    state.ui.readPosts,
+    state.ui.modal,
+    elements,
+  )
 
   return watched
 }

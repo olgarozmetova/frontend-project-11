@@ -13,6 +13,14 @@ initI18n()
     const state = {
       feeds: [],
       posts: [],
+      ui: {
+        readPosts: new Set(),
+        modal: {
+          title: '',
+          description: '',
+          link: '',
+        },
+      },
       form: {
         status: 'filling', // "processing", "failed", "success"
         error: null,
@@ -25,10 +33,16 @@ initI18n()
       feedback: document.querySelector('.feedback'),
       feedsList: document.querySelector('.feeds-list'),
       postsList: document.querySelector('.posts-list'),
+
+      modalTitle: document.querySelector('.modal-title'),
+      modalBody: document.querySelector('.modal-body'),
+      modalLink: document.querySelector('#modal-read-full'),
+      modalElement: document.querySelector('#modal'),
     }
 
     const watched = initView(state, elements)
 
+    // Auto-update
     const updateFeeds = () => {
       const promises = watched.feeds.map(feed =>
         loadFeed(feed.url)
@@ -52,6 +66,7 @@ initI18n()
       })
     }
 
+    // Form submit
     elements.form.addEventListener('submit', (e) => {
       e.preventDefault()
 
@@ -98,6 +113,24 @@ initI18n()
           watched.form.status = 'failed'
           watched.form.error = err.message
         })
+    })
+
+    // Processing clicks
+    elements.postsList.addEventListener('click', (e) => {
+      const postId = e.target.dataset.id
+
+      if (postId) {
+        // Mark as read
+        watched.ui.readPosts.add(postId)
+        // Fill in the modal window
+        const post = watched.posts.find(p => p.id === postId)
+
+        if (post) {
+          watched.ui.modal.title = post.title
+          watched.ui.modal.description = post.description
+          watched.ui.modal.link = post.link
+        }
+      }
     })
   })
   .catch((err) => {
