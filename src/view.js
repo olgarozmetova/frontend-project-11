@@ -1,6 +1,5 @@
 import onChange from 'on-change'
 import i18next from 'i18next'
-import * as bootstrap from 'bootstrap'
 
 const renderFeeds = (feeds, feedsList) => {
   feedsList.innerHTML = ''
@@ -17,7 +16,7 @@ const renderFeeds = (feeds, feedsList) => {
   })
 }
 
-const renderPosts = (posts, postsList, readPosts, modalState, elements) => {
+const renderPosts = (posts, postsList, readPosts) => {
   postsList.innerHTML = ''
   if (posts.length === 0) return
 
@@ -41,17 +40,7 @@ const renderPosts = (posts, postsList, readPosts, modalState, elements) => {
     const button = document.createElement('button')
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
     button.textContent = 'Просмотр'
-    button.addEventListener('click', () => {
-      // Modal update
-      modalState.title = post.title
-      modalState.description = post.description
-      modalState.link = post.link
-      // Mark as read
-      readPosts.add(post.id)
-      // Modal open
-      const modal = new bootstrap.Modal(elements.modalElement)
-      modal.show()
-    })
+    button.dataset.id = post.id
 
     li.append(a, button)
     postsList.append(li)
