@@ -59,7 +59,7 @@ initI18n()
               watched.posts.push(...newPosts)
             }
           })
-          .catch(() => {})
+          .catch(() => {}),
       )
 
       Promise.all(promises).finally(() => {
@@ -68,7 +68,7 @@ initI18n()
     }
 
     // Form submit
-    elements.form.addEventListener('submit', e => {
+    elements.form.addEventListener('submit', (e) => {
       e.preventDefault()
 
       const formData = new FormData(e.target)
@@ -109,7 +109,7 @@ initI18n()
             updateFeeds()
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // errors
           watched.form.status = 'failed'
           watched.form.error = err.message
@@ -117,7 +117,7 @@ initI18n()
     })
 
     // Processing clicks
-    elements.postsList.addEventListener('click', e => {
+    elements.postsList.addEventListener('click', (e) => {
       const postId = e.target.dataset.id
       if (!postId) return
 
@@ -136,6 +136,6 @@ initI18n()
       }
     })
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('Ошибка инициализации i18next:', err)
   })
