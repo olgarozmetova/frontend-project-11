@@ -14,23 +14,37 @@ A web application that accepts a link to RSS feeds, loads them, displays a list 
 ### 🚀 Features
 
 ✨ Users can add any valid RSS feed URL
+
 ⏱️ Every 5 seconds, the application checks all added feeds
+
 🆕 New posts are detected and added automatically
+
 📖 When a post is opened (previewed), it becomes read
+
 💾 Read posts are stored in application state
+
 👁️ Modal Preview opens a modal displaying title, description, link
+
 🌍 Internationalization: Interface localized with i18next
+
 ⚠️ Validation: displays messages for invalid url, network errors, non-RSS formats
 
 ### ⚙️ Technologies
 
 JavaScript (project was developed using the Model—View—Controller pattern)
+
 Vite - build tool
+
 i18next - localization
+
 Yup - validation
+
 On-change - watcher for changes (view)
+
 Axios — HTTP requests
+
 Bootstrap — UI styles & modal component
+
 DOMParser — XML parsing
 
 ## 🔧 Installation and Setup
