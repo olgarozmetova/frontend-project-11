@@ -50,8 +50,8 @@ DOMParser — XML parsing
 ## 🔧 Installation and Setup
 
 ```bash
-git clone https://github.com/your-username/rss-reader.git
-cd rss-reader
+git clone https://github.com/olgarozmetova/frontend-project-11.git
+cd frontend-project-11
 
 make install
 ```
